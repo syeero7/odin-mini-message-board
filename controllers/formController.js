@@ -1,4 +1,4 @@
-import { messages } from "../db.js";
+import { insertMessage } from "../db/queries.js";
 
 export const handleSubmit = async (req, res) => {
   const { messageText, messageUser } = req.body;
@@ -6,14 +6,6 @@ export const handleSubmit = async (req, res) => {
   if (!messageText.trim().length || !messageUser.trim().length)
     return res.redirect("/");
 
-  const id = messages[messages.length - 1]?.id + 1;
-
-  messages.push({
-    id,
-    text: messageText,
-    user: messageUser,
-    added: new Date(),
-  });
-
+  await insertMessage(messageText, messageUser);
   res.redirect("/");
 };

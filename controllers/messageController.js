@@ -1,9 +1,7 @@
-import { messages } from "../db.js";
+import { getMessageById as _getMessageById } from "../db/queries.js";
 
 export const getMessageById = async (req, res) => {
-  const id = parseInt(req.params.messageId);
-
-  const message = messages.find((message) => message.id === id);
+  const message = await _getMessageById(req.params.messageId);
 
   res.render("message", { message });
 };

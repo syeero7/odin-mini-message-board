@@ -5,7 +5,7 @@ import indexRouter from "./routes/indexRouter.js";
 import newMessageRouter from "./routes/newMessageRouter.js";
 import messageRouter from "./routes/messageRouter.js";
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
