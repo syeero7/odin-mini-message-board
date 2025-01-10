@@ -1,37 +1,38 @@
-import fs from "fs";
 import pg from "pg";
 const { Client } = pg;
 
 const databaseURL = process.env.DATABASE_URL;
 
+const isFirstScriptExecution = async (client) => {
+  const query = `SELECT NOT EXISTS (
+    SELECT 1 
+    FROM pg_tables 
+    WHERE schemaname = 'public' AND tablename = 'messages'
+    ) AS table_not_exists;`;
+
+  const { rows } = await client.query(query);
+  return rows[0].table_not_exists;
+};
+
 const SQL = `CREATE TABLE IF NOT EXISTS messages (
-  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  text TEXT,
-  username TEXT,
-  added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-INSERT INTO messages (text, username) 
-VALUES ('Hi there!', 'jane'), ('Hello World!', 'sam');
-`;
-
-const flagFilePath = "./scriptExecutedFlag.txt";
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    text TEXT,
+    username TEXT,
+    added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+  
+  INSERT INTO messages (text, username) 
+  VALUES ('Hi there!', 'jane'), ('Hello World!', 'sam');
+  `;
 
 const main = async () => {
-  if (fs.existsSync(flagFilePath)) {
-    console.log("The script has already executed once and will not run again.");
-    return;
-  }
-
-  console.log("seeding...");
-
   const client = new Client({ connectionString: databaseURL });
   await client.connect();
-  await client.query(SQL);
+  if (await isFirstScriptExecution(client)) {
+    await client.query(SQL);
+    console.log("database has been populated");
+  }
   await client.end();
-
-  fs.writeFileSync(flagFilePath, "Script has executed once.");
-  console.log("done");
 };
 
 main();
