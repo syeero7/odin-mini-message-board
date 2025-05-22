@@ -8,23 +8,27 @@
   <body>
     <h1><%= title %></h1>
 
-    <div>
-      <a href="new">Add New Message</a>
-    </div>
+    <div><a href="new">Add New Message</a></div>
     <hr />
+    <br />
 
     <main>
-      <% messages.forEach(message => { %>
-      <article>
-        <p><%= message.username %></p>
-        <p><%= message.text %></p>
-        <p><%= message.added %></p>
-        <a href="messages/<%= message.id %>" rel="noreferrer" target="_blank">
-          open
-        </a>
-      </article>
-      <hr />
-      <% }) %>
+      <h2>Messages</h2>
+      <ul>
+        <% messages.forEach(message => { %>
+        <li>
+          <p>
+            &nbsp; <%= message.username %> &nbsp;
+            <a
+              href="messages/<%= message.id %>"
+              rel="noreferrer"
+              target="_blank">
+              open
+            </a>
+          </p>
+        </li>
+        <% }) %>
+      </ul>
     </main>
   </body>
 </html>

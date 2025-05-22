@@ -6,17 +6,15 @@
     <title>message</title>
   </head>
   <body>
-    <p>
-      <span>User: </span>
-      <%= message.username %>
-    </p>
-    <p>
-      <span>Message: </span>
-      <%= message.text %>
-    </p>
-    <p>
-      <span>Date: </span>
-      <%= message.added %>
-    </p>
+    <main>
+      <strong> <%= message.username %> </strong>
+
+      <p><%= message.text %></p>
+
+      <p>
+        <span>Created At: </span>
+        <%= message.added %>
+      </p>
+    </main>
   </body>
 </html>
